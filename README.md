@@ -10,7 +10,7 @@ If you want the ability to cache the response data from a controller action with
     
 By calling acts_as_redis_cache, some before and after filters are automatically added to your contrller which handles all aspects of handling the cache.
     
-In order to keep track of which IDs are associated with a cache inside controller actions simply set a key in the instance variable @keyed_ids.  @keyed_ids will be created for you as an empty array in a before filter so you don't need to worry about initializing this.  For example:
+In order to keep track of which IDs are associated with a cache inside controller actions simply set a key in the instance variable @keyed_ids.  @keyed_ids will be created for you as an empty array in a before filter so you don't need to worry about initializing this.  For example if your exsisting controller looks something lke:
 
     class UserController < ActionController::Base
       def show
