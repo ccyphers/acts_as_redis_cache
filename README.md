@@ -75,7 +75,7 @@ In a before_action filter created for you, "get_cache_for_act_as_redis_cacheable
 
 ## Flushing cache data with before_save filter
 
-Inside of your model, you need to call acts_as_redis_cache, which will automatically setup a before_save filter to delte all cache keys when the associated ID is found in the associated @keyed_ids set.
+Inside of your model, you need to call acts_as_redis_cache, which will automatically setup a before_save filter to delte all cache keys when the model's instance ID is found in the associated @keyed_ids set.
 
     class User < ActiveRecord::Base
     
