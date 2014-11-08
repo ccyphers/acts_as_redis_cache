@@ -2,8 +2,8 @@ class ActiveRecord::Base
   def self.acts_as_redis_cache(*args)
     self.class_eval do
       @@acts_as_redis_cache_map ||= {}
-      @@redis = Redis.new
-
+      @@redis = Redis.new(:host => Rails.application.config.acts_as_redis_cache[:redis_host],
+                          :port => Rails.application.config.acts_as_redis_cache[:redis_port])
       before_save :acts_as_redis_cache_revalidate_cache
 
       args.each { |arg|

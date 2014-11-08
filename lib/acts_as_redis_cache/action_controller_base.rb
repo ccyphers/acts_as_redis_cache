@@ -22,7 +22,8 @@ module ActionController
           klass.before_action :get_cache_for_act_as_redis_cacheable, :only => acts_as_redis_cache_map
           klass.after_action :set_cache_for_act_as_redis_cacheable, :only => acts_as_redis_cache_map
 
-          @@redis = Redis.new
+          @@redis = Redis.new(:host => Rails.application.config.acts_as_redis_cache[:redis_host],
+                              :port => Rails.application.config.acts_as_redis_cache[:redis_port])
 
           private
 

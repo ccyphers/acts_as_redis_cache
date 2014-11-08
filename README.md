@@ -89,4 +89,14 @@ acts_as_redis_cache takes an array of hashes, so you can have many pairs defined
 
 When the before_filter is called, it first checks the cached set for :user_ids associated with the defined path and if the current model instance's ID is found in the set, it then knows that the cache data is dirty and simply deletes all keys associated with this cache data.  Then on the next request to the controller, the controller's before filter will see there's no cache available and fall back to the user's controller to build the response followed by caching the new data.
 
+## Configuration
+
+In your environments/<env>.rb you can define the redis connection info via:
+
+config.acts_as_redis_cache = {:redis_host => 'ip or hostname', :redis_port => port_number}
+
+If left blank this defaults to:
+
+config.acts_as_redis_cache = {:redis_host => '127.0.0.1', :redis_port => 6379}
+
 
