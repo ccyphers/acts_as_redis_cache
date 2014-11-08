@@ -28,12 +28,22 @@ module ActionController
 
           @@redis = Redis.new
 
+          private
+
+          def params_sum
+            sum = ""
+            params.each { |k, v|
+              sum += "#{k}=#{v}"
+            }
+            Digest::MD5.hexdigest(sum)
+          end
+
           def redis
             @@redis
           end
 
           def set_redis_cache_keys
-            @cache_key = "#{params[:controller]}_#{params[:action]}"
+            @cache_key = "#{params[:controller]}_#{params[:action]}_#{params_sum}"
           end
 
           def set_cache_for_act_as_redis_cacheable
