@@ -4,11 +4,11 @@
 
 ### Transparent caching for controller actions
 
-If you want the ability to cache the response data from a controller action with ease at the same time being able to keep track of the IDs associated with a cache set, so that the cache can be deleted when the DB is updated.  At the beginning of your controller class definition you need to call the class method "acts_as_redis_cache":
+If you want the ability to cache the response data from a controller action with ease at the same time being able to keep track of the IDs associated with a cache set, so that the cache can be deleted when the DB is updated, simply make a call to the class method "acts_as_redis_cache":
 
     acts_as_redis_cache :<controller method 1>,...,:<controller method N>
     
-By calling acts_as_redis_cache, some before and after filters are automatically created which handles all aspects of handling the cache.
+By calling acts_as_redis_cache, some before and after filters are automatically added to your contrller which handles all aspects of handling the cache.
     
 In order to keep track of which IDs are associated with a cache inside controller actions simply set a key in the instance variable @keyed_ids.  @keyed_ids will be created for you as an empty array in a before filter so you don't need to worry about initializing this.  For example:
 
