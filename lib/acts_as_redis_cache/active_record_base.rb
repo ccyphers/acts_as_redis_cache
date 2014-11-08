@@ -10,8 +10,8 @@ class ActiveRecord::Base
         next unless arg.kind_of? Hash
 
         arg.each { |k, v|
-          v[:dirty_keys] ||= []
-          @@acts_as_redis_cache_map[k] = v[:dirty_keys]
+          raise ArgumentError unless v.kind_of?(Array)
+          @@acts_as_redis_cache_map[k] = v
         }
 
         def acts_as_redis_cache_revalidate_cache

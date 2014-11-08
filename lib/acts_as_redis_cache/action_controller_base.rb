@@ -2,18 +2,14 @@ module ActionController
   class Base
     def self.acts_as_redis_cache(*args)
       self.class_eval do
-        @acts_as_redis_cache_map = {}
+        @acts_as_redis_cache_map ||= []
         class << self
           attr_accessor :acts_as_redis_cache_map
         end
 
-        args.each { |arg|
-          if arg.kind_of? Hash
-            raise ArgumentError unless [Array, Symbol].include?(arg.values.first.class)
+        acts_as_redis_cache_map << args
+        acts_as_redis_cache_map.flatten!
 
-            acts_as_redis_cache_map[arg.keys.first] = arg.values.first
-          end
-        }
         include ActsAsRedisCache
       end
     end
@@ -22,9 +18,9 @@ module ActionController
       def self.included(klass)
         klass.class_eval do
 
-          klass.before_action :set_redis_cache_keys, :only => acts_as_redis_cache_map.keys
-          klass.before_action :get_cache_for_act_as_redis_cacheable, :only => acts_as_redis_cache_map.keys
-          klass.after_action :set_cache_for_act_as_redis_cacheable, :only => acts_as_redis_cache_map.keys
+          klass.before_action :set_redis_cache_keys, :only => acts_as_redis_cache_map
+          klass.before_action :get_cache_for_act_as_redis_cacheable, :only => acts_as_redis_cache_map
+          klass.after_action :set_cache_for_act_as_redis_cacheable, :only => acts_as_redis_cache_map
 
           @@redis = Redis.new
 
@@ -32,9 +28,7 @@ module ActionController
 
           def params_sum
             sum = ""
-            params.each { |k, v|
-              sum += "#{k}=#{v}"
-            }
+            params.each { |k, v| sum += "#{k}=#{v}" }
             Digest::MD5.hexdigest(sum)
           end
 
