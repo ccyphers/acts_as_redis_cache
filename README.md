@@ -47,9 +47,11 @@ Appended is the sum of the parameters:
 
     def params_sum
       sum = ""
-      params.each { |k, v| sum += "#{k}=#{v}" }
+      # need to ensure order
+      params.keys.sort.each { |k| sum += "#{k}=#{params[k]}" }
       Digest::MD5.hexdigest(sum)
     end
+
 
 So the complete base key becomes:
 
