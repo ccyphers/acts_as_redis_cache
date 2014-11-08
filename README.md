@@ -1,5 +1,8 @@
 ## ACTS_AS_REDIS_CACHE
 
+### Misc Design Decisions
+
+For my personal needs, I'm assuming that each web server instance is running a redis-server.  This way you can indipendently control the cache data and the cache will be quicker to access than a shared redis instance on the network.  Since DB servers already cache data, the key here is to reduce the response time, especially when the DB is not on the same host as the app server, or when multiple tables require joining and posibly performing additional operations/transformations on the data before returning to the client.
 
 ### Transparent caching for controller actions
 
