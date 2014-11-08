@@ -74,7 +74,7 @@ Inside of your model, you need to call acts_as_redis_cache, which will automatic
 
     class User < ActiveRecord::Base
     
-      acts_as_redis_cache "api/v1/courses_auth_by_instructor" => [:user_ids]
+      acts_as_redis_cache "users/show" => [:user_ids]
       
       def self.some_model_class_method
         ...
