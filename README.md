@@ -91,7 +91,7 @@ When the before_filter is called, it first checks the cached set for :user_ids a
 
 ## Configuration
 
-In your environments/<env>.rb you can define the redis connection info via:
+In your environments/<env\>.rb you can define the redis connection info via:
 
 config.acts_as_redis_cache = {:redis_host => 'ip or hostname', :redis_port => port_number}
 
