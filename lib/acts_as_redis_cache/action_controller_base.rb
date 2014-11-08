@@ -44,7 +44,7 @@ module ActionController
 
           def set_cache_for_act_as_redis_cacheable
             unless has_cache_for_act_as_redis_cacheable
-              redis.set(@cache_key, response.body)
+              redis.set(@cache_key, {:content_type => response.content_type, :body => response.body}.to_json)
               if instance_variables.include?(:@keyed_ids)
                 @keyed_ids.each { |k, ids|
                   key = "#{@cache_key}_#{k}"
@@ -57,7 +57,10 @@ module ActionController
 
           def get_cache_for_act_as_redis_cacheable
             if has_cache_for_act_as_redis_cacheable
-              render :text => redis.get(@cache_key) and return
+              cache = JSON.parse(redis.get(@cache_key))
+              content_type = cache['content_type']
+              response.content_type=content_type
+              render :text => cache['body'] and return
             end
           end
 
