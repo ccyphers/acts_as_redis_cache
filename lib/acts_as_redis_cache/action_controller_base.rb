@@ -39,6 +39,7 @@ module ActionController
           end
 
           def set_redis_cache_keys
+            @keyed_ids = {}
             @cache_key = "#{params[:controller]}_#{params[:action]}_#{params_sum}"
           end
 
