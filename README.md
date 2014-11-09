@@ -69,7 +69,7 @@ The cache for the controller action is simply the response.body as this processi
 
 ### Serving up cached response data
 
-In a before_action filter created for you, "get_cache_for_act_as_redis_cacheable", checks to see if there is cache data available and renders that if founds else allows the request to continue to your controller action for processing.  You should never have to worry about stale cache data as long as you setup the @cache_key references properly and then wire up the required call in your model(s) which will be covered below.
+In a before_action filter created for you, "get_cache_for_act_as_redis_cacheable", checks to see if there is cache data available and renders that if found else allows the request to continue to your controller action for processing.  You should never have to worry about stale cache data as long as you setup the @cache_key references properly and then wire up the required call in your model(s) which will be covered below.
 
 ## Flushing cache data with before_save filter
 
