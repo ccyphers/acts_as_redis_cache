@@ -5,7 +5,8 @@ class ActiveRecord::Base
       @@redis = Redis.new(:host => Rails.application.config.acts_as_redis_cache[:redis_host],
                           :port => Rails.application.config.acts_as_redis_cache[:redis_port])
       before_save :acts_as_redis_cache_revalidate_cache
-      before_create :acts_as_redis_cache_new_record
+      before_create :acts_as_redis_cache_add_or_delete_record
+      after_destroy :acts_as_redis_cache_add_or_delete_record
 
       args.each { |arg|
         next unless arg.kind_of? Hash
@@ -40,14 +41,12 @@ class ActiveRecord::Base
           }
         end
 
-        def acts_as_redis_cache_new_record
+        def acts_as_redis_cache_add_or_delete_record
           acts_as_redis_cache_clear_wrap(false)
         end
 
         def acts_as_redis_cache_revalidate_cache
-          if errors.empty? and changes != {}
-            acts_as_redis_cache_clear_wrap
-          end
+          acts_as_redis_cache_clear_wrap if errors.empty? and changes != {}
         end
       }
     end
