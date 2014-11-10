@@ -48,6 +48,10 @@ class ActiveRecord::Base
         def acts_as_redis_cache_revalidate_cache
           acts_as_redis_cache_clear_wrap if errors.empty? and changes != {}
         end
+
+        def delete
+          destroy
+        end
       }
     end
   end
