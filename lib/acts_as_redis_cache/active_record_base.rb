@@ -49,9 +49,7 @@ class ActiveRecord::Base
           acts_as_redis_cache_clear_wrap if errors.empty? and changes != {}
         end
 
-        def delete
-          destroy
-        end
+        alias_method :delete, :destroy
       }
     end
   end
