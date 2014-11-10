@@ -37,7 +37,7 @@ class ActiveRecord::Base
                 end
               end
             }
-            keys_to_delete.flatten.each { |k| @@redis.del(k) }
+            keys_to_delete.flatten.each { |k| @@redis.del(k) } if cache_dirty
           }
         end
 
