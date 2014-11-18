@@ -4,7 +4,7 @@ require './lib/version'
 
 Gem::Specification.new do |s|
   s.name = %q{acts_as_redis_cache}
-  s.version = VERSION
+  s.version = ActsAsRedisCache::VERSION
   s.authors = [""]
   s.email = %q{}
   s.license = ""
