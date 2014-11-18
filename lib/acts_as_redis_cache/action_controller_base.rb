@@ -30,7 +30,10 @@ module ActionController
           def params_sum
             sum = ""
             # need to ensure order
-            params.keys.sort.each { |k| sum += "#{k}=#{params[k]}" }
+            exclude_keys = ['authenticity_token', :authenticity_token]
+            params.keys.sort.each { |k| next if exclude_keys.include?(k)
+                                    sum += "#{k}=#{params[k]}" 
+            }
             Digest::MD5.hexdigest(sum)
           end
 
