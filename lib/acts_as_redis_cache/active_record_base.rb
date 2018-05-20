@@ -24,10 +24,10 @@ class ActiveRecord::Base
           keys_to_delete = []
 
           @@acts_as_redis_cache_map.each { |path, dirty_keys|
-            keys = @@redis.keys.grep(/^#{path}_/)
+            keys = @@redis.keys.grep(/^#{path}-----/)
 
             dirty_keys.each { |dirty_set|
-              dirty_key = keys.grep(/^#{path}_.+_#{dirty_set}$/).first
+              dirty_key = keys.grep(/^#{path}-----.+_#{dirty_set}$/).first
               if dirty_key
                 is_member = is_member_check ? @@redis.sismember(dirty_key, id) : true
                 if is_member
