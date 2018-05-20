@@ -1,7 +1,11 @@
+require('pry')
+
 module ActionController
   class Base
     def self.acts_as_redis_cache(*args)
+
       self.class_eval do
+        
         @acts_as_redis_cache_map ||= []
         class << self
           attr_accessor :acts_as_redis_cache_map
@@ -29,12 +33,15 @@ module ActionController
 
           def params_sum
             sum = ""
+            
             # need to ensure order
-            exclude_keys = ['authenticity_token', :authenticity_token]
+            exclude_keys = ['authenticity_token', :authenticity_token, "controller", "action"]
             params.keys.sort.each { |k| next if exclude_keys.include?(k)
                                     sum += "#{k}=#{params[k]}" 
             }
+
             Digest::MD5.hexdigest(sum)
+          
           end
 
           def redis
@@ -43,12 +50,18 @@ module ActionController
 
           def set_redis_cache_keys
             @keyed_ids = {}
-            @cache_key = "#{params[:controller]}_#{params[:action]}_#{params_sum}"
+            @cache_key = "#{request.method}#{request.path}"
+            sum = params_sum
+
+            if sum != ""
+              @cache_key = "#{@cache_key}-----#{sum}"
+            end
           end
 
           def set_cache_for_act_as_redis_cacheable
             unless has_cache_for_act_as_redis_cacheable
-              redis.set(@cache_key, {:content_type => response.content_type, :body => response.body}.to_json)
+              redis.set(@cache_key, response.body)
+              
               if instance_variables.include?(:@keyed_ids)
                 @keyed_ids.each { |k, ids|
                   key = "#{@cache_key}_#{k}"
@@ -62,9 +75,10 @@ module ActionController
           def get_cache_for_act_as_redis_cacheable
             if has_cache_for_act_as_redis_cacheable
               cache = JSON.parse(redis.get(@cache_key))
-              content_type = cache['content_type']
-              response.content_type=content_type
-              render :text => cache['body'] and return
+              #content_type = cache['content_type']
+              #response.content_type= 'application/json'#content_type
+              #render :text => cache['body'] and return
+              render :json => cache and return
             end
           end
 

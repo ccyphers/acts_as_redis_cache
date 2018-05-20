@@ -39,7 +39,7 @@ If your model data is more complex, containing multiple tables that are joined t
 
 Since a controller can dynamically decide what data to render to the client based on the input data in params, the params is hashed as part of the cache key.  So a given action could have multiple cached items based on the number of request that have hit the resource with different input data.  The base cache key is composed of:
 
-    params[:controller] + params[:action]
+    request.method + request.path
     
 Appended is the sum of the parameters:
 
@@ -59,7 +59,7 @@ So the complete base key becomes:
 For each key in @keyed_ids the array of IDs is stored in a redis set:
 
     @keyed_ids.each { |k, ids|
-      key = "#{@cache_key}_#{k}"
+      key = "#{@cache_key}-----#{k}"
       redis.sadd(key, ids)
     }
 
@@ -85,7 +85,7 @@ Inside of your model, you need to call acts_as_redis_cache, which will automatic
       end
     end
     
-acts_as_redis_cache takes an array of hashes, so you can have many pairs defined, which is needed for cases that multiple controller actions reference the same model for cache data.  Also, if a given controller action results in multiple tables joined together, make sure to puth the acts_as_redis_cache in each model associated with the JOIN.
+acts_as_redis_cache takes an array of hashes, so you can have many pairs defined, which is needed for cases that multiple controller actions reference the same model for cache data.  Also, if a given controller action results in multiple tables joined together, make sure to put the acts_as_redis_cache in each model associated with the JOIN.
 
 When the before_filter is called, it first checks the cached set for :user_ids associated with the defined path and if the current model instance's ID is found in the set, it then knows that the cache data is dirty and simply deletes all keys associated with this cache data.  Then on the next request to the controller, the controller's before filter will see there's no cache available and fall back to the user's controller to build the response followed by caching the new data.
 
